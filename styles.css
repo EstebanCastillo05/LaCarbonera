@@ -231,15 +231,21 @@ header {
 
 .hero-content h1 {
     color: var(--brand-gold);
-    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
     line-height: 1.1;
     margin-bottom: 0.8rem;
 }
 
 .hero-content p {
-    font-size: 1.1rem;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
     margin-bottom: 1.5rem;
     color: var(--text-light);
+}
+
+/* TÍTULOS DE SECCIÓN (fluidos, antes dependían del tamaño por defecto del navegador) */
+.section-title {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    line-height: 1.2;
 }
 
 /* MENÚ CON TELA TRASLÚCIDA Y CENTRADO DE CARDS */
@@ -354,11 +360,11 @@ header {
     flex-grow: 1;
 }
 
+/* Footer de la tarjeta: se quitó la línea dorada divisoria (barrita de color) */
 .menu-card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgba(212, 175, 55, 0.25);
     padding-top: 0.8rem;
     margin-top: auto;
 }
@@ -423,6 +429,7 @@ header {
 .modal-header-info { text-align: center; margin-bottom: 1.5rem; }
 .modal-price-tag { font-size: 1.25rem; font-weight: 700; color: var(--brand-orange); }
 
+/* Lista de variantes/precios dentro del modal: se quitó la barrita dorada lateral */
 .variant-list { list-style: none; display: grid; gap: 0.6rem; }
 .variant-list li {
     display: flex;
@@ -430,7 +437,6 @@ header {
     padding: 0.75rem 1rem;
     background-color: var(--bg-light-gray);
     border-radius: 4px;
-    border-left: 4px solid var(--brand-gold);
     font-weight: 600;
 }
 
@@ -457,10 +463,13 @@ header {
 
 .ubicacion-section { padding: 4.5rem 0; text-align: center; }
 .ubicacion-desc { margin-bottom: 1.5rem; }
+
+/* Mapa: ahora usa aspect-ratio en vez de altura fija, se adapta a cualquier ancho */
 .mapa-grande-container {
     width: 100%;
     max-width: 950px;
-    height: 380px;
+    aspect-ratio: 16 / 7;
+    max-height: 380px;
     margin: 0 auto 1.5rem;
     border-radius: 8px;
     overflow: hidden;
@@ -638,6 +647,14 @@ footer {
 }
 
 /* RESPONSIVE */
+
+/* Tablet / escritorio angosto */
+@media (min-width: 769px) {
+    .nosotros-content { flex-direction: row; }
+    .footer-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Móvil / tablet vertical */
 @media (max-width: 850px) {
     .menu-toggle { display: block; }
     .nav-links {
@@ -655,9 +672,63 @@ footer {
     .nav-links.active { display: flex !important; }
     .empleo-grid { grid-template-columns: 1fr; }
     .hero { aspect-ratio: auto; min-height: 520px; }
+
+    /* En una sola columna el panel ya no necesita quedar fijo al hacer scroll */
+    .pdf-card { position: static; top: auto; }
 }
 
-@media (min-width: 769px) {
-    .nosotros-content { flex-direction: row; }
-    .footer-grid { grid-template-columns: repeat(3, 1fr); }
+/* Teléfonos pequeños */
+@media (max-width: 480px) {
+    .container { padding: 0 1.1rem; }
+
+    .navbar { height: 66px; }
+    .hero { margin-top: 66px; min-height: 420px; }
+    .logo img { height: 42px; }
+    .logo-text { font-size: 1.1rem; }
+
+    .menu-section,
+    .nosotros-section,
+    .reserva-intermedia,
+    .ubicacion-section {
+        padding: 3rem 0;
+    }
+
+    .menu-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.4rem;
+    }
+
+    .menu-card-content { padding: 1rem; }
+
+    .dish-modal-content { padding: 1.4rem; }
+
+    .form-container { padding: 1.5rem; }
+
+    .empleo-grid { padding: 2.5rem 1rem; gap: 2rem; }
+
+    .btn {
+        width: 100%;
+        padding: 13px 20px;
+    }
+
+    .ubicacion-acciones .btn,
+    .ubicacion-acciones .btn-waze {
+        width: auto;
+    }
+
+    .mapa-grande-container { aspect-ratio: 4 / 5; max-height: none; }
+}
+
+/* Respeta la preferencia del usuario de reducir animaciones */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+    .menu-card:hover,
+    .btn-primary:hover,
+    .whatsapp-float:hover {
+        transform: none;
+    }
 }
