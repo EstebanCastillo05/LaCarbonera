@@ -12,24 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const defaultImage = 'img/frente.webp';
 
     // ================= 2. DATASET DEL MENÚ =================
-    // Platos individuales se muestran completos
-    // Categorías con más de 6 elementos quedan agrupadas limpiamente en 3-6 cards
     const menuItems = [
-        // CALDOS & SOPAS (5 ítems directos sin modales)[cite: 1]
+        // CALDOS & SOPAS
         { id: "c1", categoria: "Caldos & Sopas", nombre: "Caldo de Gallina Criolla", precio: 65, desc: "1/4 de gallina criolla servido con arroz y vegetales.", img: "img/caldores.webp" },
         { id: "c2", categoria: "Caldos & Sopas", nombre: "Caldo de Pata", precio: 65, desc: "Trozos de pata de res premium cocida a fuego lento.", img: "img/caldopata.webp" },
         { id: "c3", categoria: "Caldos & Sopas", nombre: "Caldo Tlalpeño", precio: 60, desc: "Pollo, queso mozzarella y totopos de maíz.", img: "img/caldotortilla.webp" },
         { id: "c4", categoria: "Caldos & Sopas", nombre: "Caldo de Mariscos", precio: 120, desc: "Jaiba, almeja, camarones jumbo, camarones pequeños y bagre entero 1 lb.", img: "img/caldores.webp" },
         { id: "c5", categoria: "Caldos & Sopas", nombre: "Sopa de Camarones", precio: 99, desc: "Camarones jumbo seleccionados y vegetales.", img: "img/caldores.webp" },
 
-        // MARISCOS (5 ítems directos sin modales)[cite: 1]
+        // MARISCOS
         { id: "m1", categoria: "Mariscos", nombre: "Ceviche Mixto", precio: 60, desc: "Acompañado de tostadas de la casa o galleta.", img: defaultImage },
         { id: "m2", categoria: "Mariscos", nombre: "Aguachile", precio: 70, desc: "Camarones frescos con receta tradicional verde.", img: defaultImage },
         { id: "m3", categoria: "Mariscos", nombre: "Ceviche de Camarón", precio: 75, desc: "Acompañado de tostadas de la casa o galleta.", img: defaultImage },
         { id: "m4", categoria: "Mariscos", nombre: "Mojarra Frita", precio: 80, desc: "Acompañada de ensalada jardinera y papas de la casa.", img: defaultImage },
         { id: "m5", categoria: "Mariscos", nombre: "Camarones al Gusto", precio: 125, desc: "Jumbo: empanizados, al mojo de ajo, a la diabla o a la parrilla.", img: defaultImage },
 
-        // PARRILLA Y CORTES (6 cards estratégicas)[cite: 1]
+        // PARRILLA Y CORTES
         { id: "p-pechuga", categoria: "Parrilla & Cortes", nombre: "Filete de Pechuga a la Parrilla", precio: 59, desc: "Pechuga asada al carbón con papas, elote y cebollín.", img: defaultImage },
         { id: "p-adobado", categoria: "Parrilla & Cortes", nombre: "Adobado de la Casa", precio: 50, desc: "Carne de cerdo adobada acompañada de chorizo o longaniza y guarniciones.", img: defaultImage },
         { id: "p-cordero", categoria: "Parrilla & Cortes", nombre: "Cordero de los Cuchumatanes", precio: 125, desc: "Pierna de cordero de la sierra (8 oz) marinada y asada a la brasa.", img: defaultImage },
@@ -64,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
 
-        // ENTRADAS & SNACKS (6 cards)[cite: 1]
+        // ENTRADAS & SNACKS
         { id: "e1", categoria: "Entradas & Snacks", nombre: "Nachos con Carne y Cheddar", precio: 45, desc: "Totopos con carne sazonada y queso cheddar fundido.", img: defaultImage },
         { id: "e2", categoria: "Entradas & Snacks", nombre: "Costillas Baby Back (1/2 lb)", precio: 50, desc: "Salsa BBQ o búfalo, montadas sobre totopos.", img: defaultImage },
         { id: "e3", categoria: "Entradas & Snacks", nombre: "Alitas de la Casa (1 lb)", precio: 60, desc: "Salsa BBQ o búfalo, montadas sobre totopos y aderezo.", img: defaultImage },
@@ -83,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
 
-        // COMIDA CASUAL (3 cards agrupadas)[cite: 1]
+        // COMIDA CASUAL
         {
             id: "u1",
             categoria: "Comida Casual",
@@ -126,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
 
-        // BEBIDAS (5 cards agrupadas)[cite: 1]
+        // BEBIDAS
         {
             id: "b1",
             categoria: "Bebidas",
@@ -198,7 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const dishModal = document.getElementById('dish-modal');
     const modalCloseBtn = document.getElementById('modal-close-btn');
 
-    // Salir de forma limpia si la página no tiene el menú
+    const modalTitle = document.getElementById('dish-modal-title');
+    const modalDesc = document.getElementById('dish-modal-description');
+    const modalPrice = document.getElementById('dish-modal-price');
+    const modalVariants = document.getElementById('dish-modal-variants');
+
     if (menuGrid && menuTabs) {
         const formatPrice = (p) => `Q ${Number(p).toFixed(2)}`;
 
@@ -241,15 +243,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderMenu(categories[0]);
 
-        // Modal para variantes
         const openModal = (item) => {
             if (!dishModal) return;
-            document.getElementById('dish-modal-title').textContent = item.nombre;
-            document.getElementById('dish-modal-description').textContent = item.desc || 'Platillo preparado con la calidad de La Carbonera.';
-            document.getElementById('dish-modal-price').textContent = `Opciones Disponibles (Desde ${formatPrice(item.precioBase)})`;
-            document.getElementById('dish-modal-variants').innerHTML = item.variantes.map(v => `
-                <li><span>${v.nombre}</span><strong>${formatPrice(v.precio)}</strong></li>
-            `).join('');
+            if (modalTitle) modalTitle.textContent = item.nombre;
+            if (modalDesc) modalDesc.textContent = item.desc || 'Platillo preparado con la calidad de La Carbonera.';
+            if (modalPrice) modalPrice.textContent = `Opciones Disponibles (Desde ${formatPrice(item.precioBase)})`;
+            if (modalVariants && item.variantes) {
+                modalVariants.innerHTML = item.variantes.map(v => `
+                    <li><span>${v.nombre}</span><strong>${formatPrice(v.precio)}</strong></li>
+                `).join('');
+            }
             dishModal.classList.add('is-open');
             document.body.style.overflow = 'hidden';
         };
@@ -282,14 +285,19 @@ document.addEventListener('DOMContentLoaded', () => {
         formEmpleo.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const nombre = document.getElementById('nombre').value.trim();
-            const apellido = document.getElementById('apellido').value.trim();
-            const telefono = document.getElementById('telefono').value.trim();
-            const transporte = document.getElementById('transporte').value;
-            const direccion = document.getElementById('direccion').value.trim();
-            const disponibilidad = document.getElementById('disponibilidad').value;
-            const tarjetas = document.getElementById('tarjetas').value;
-            const experiencia = document.getElementById('experiencia').value.trim() || 'Sin experiencia previa especificada';
+            const getVal = (id) => {
+                const el = document.getElementById(id);
+                return el ? el.value.trim() : '';
+            };
+
+            const nombre = getVal('nombre');
+            const apellido = getVal('apellido');
+            const telefono = getVal('telefono');
+            const transporte = getVal('transporte');
+            const direccion = getVal('direccion');
+            const disponibilidad = getVal('disponibilidad');
+            const tarjetas = getVal('tarjetas');
+            const experiencia = getVal('experiencia') || 'Sin experiencia previa especificada';
 
             const textoMensaje = 
                 `*NUEVA POSTULACIÓN - RESTAURANTE LA CARBONERA*\n\n` +
@@ -308,5 +316,27 @@ document.addEventListener('DOMContentLoaded', () => {
             window.open(urlWhatsApp, '_blank');
             formEmpleo.reset();
         });
+    }
+
+    // ================= 4. ANIMACIONES AL HACER SCROLL =================
+    const revealEls = document.querySelectorAll('.reveal-blur, .reveal-left, .reveal-right');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!('IntersectionObserver' in window) || prefersReducedMotion) {
+        revealEls.forEach((el) => el.classList.add('is-visible'));
+    } else {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.15 }
+        );
+
+        revealEls.forEach((el) => observer.observe(el));
     }
 });
